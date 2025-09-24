@@ -1,0 +1,35 @@
+// prisma/schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// ADICIONE ESTE BLOCO DE VOLTA!
+datasource db {
+  provider = "sqlite" // Você estava usando sqlite
+  url      = env("DATABASE_URL")
+}
+
+// Adicione este Enum acima do seu modelo. Ele define os status possíveis.
+enum ReminderStatus {
+  AGENDADO
+  ENVIADO
+  ERRO
+}
+
+// Substitua o seu model Reminder por este:
+model Reminder {
+  id               String   @id @default(cuid())
+  message          String   // Mensagem do lembrete
+  notificationDate DateTime // Data e hora para enviar a notificação
+  status           ReminderStatus @default(AGENDADO) // Status atual do lembrete
+  
+  // Opcional: Para ligar o lembrete a um usuário no futuro
+  // userId        String?  
+
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  // Mapeia o nome do modelo para a tabela "reminders" no banco de dados
+  @@map("reminders")
+}

@@ -1,0 +1,17 @@
+@baseUrl = http://localhost:3000
+
+### @name createRoom <-- Você pode mudar o nome para algo como createReminder
+# @name createReminder
+POST {{baseUrl}}/api/reminders
+Content-Type: application/json
+
+
+{
+  "message": "Pagar conta de luz",
+  "notificationDate": "2025-09-24T15:56:00"
+
+}
+
+###
+# @name listReminders
+GET {{baseUrl}}/api
