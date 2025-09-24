@@ -1,7 +1,5 @@
-// src/controllers/remindersController.ts
-
 import { Request, Response } from 'express';
-import prisma from '../models/prisma'; // Assumindo que prisma está em '../models/prisma'
+import prisma from '../models/prisma';
 import { reminderQueue } from '../lib/queue'; // <-- Vamos criar este arquivo
 
 // 1. Interface para o que o CLIENTE ENVIA no corpo da requisição POST
@@ -66,5 +64,16 @@ export const getReminders = async (req: Request, res: Response) => {
   } catch (error) {
     console.error('Erro ao buscar lembretes:', error);
     return res.status(500).json({ message: 'Erro interno do servidor.' });
+  }
+};
+
+export const deleteReminder = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    await prisma.reminder.delete({ where: { id: id } });
+    return res.status(204).send();
+  } catch (error) {
+    console.error('Falha ao deletar lembrete:', error);
+    return res.status(500).json({ message: 'Erro ao deletar o lembrete.' });
   }
 };

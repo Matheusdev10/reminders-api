@@ -14,4 +14,10 @@ Content-Type: application/json
 
 ###
 # @name listReminders
-GET {{baseUrl}}/api
+GET {{baseUrl}}/api/reminders
+
+
+
+###
+# @name DeleteReminder
+DELETE {{baseUrl}}/api/reminders/cmfx0y6b60000icufqoshe5co
