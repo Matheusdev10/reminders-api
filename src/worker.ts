@@ -1,5 +1,3 @@
-// Crie um novo arquivo: src/worker.ts
-
 import { Worker } from 'bullmq';
 import prisma from './models/prisma';
 import mail from './lib/mail'; // <-- Importe o serviço de e-mail
