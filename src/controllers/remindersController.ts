@@ -70,10 +70,45 @@ export const getReminders = async (req: Request, res: Response) => {
 export const deleteReminder = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
-    await prisma.reminder.delete({ where: { id: id } });
+    await prisma.reminder.delete({ where: { id } });
     return res.status(204).send();
   } catch (error) {
     console.error('Falha ao deletar lembrete:', error);
     return res.status(500).json({ message: 'Erro ao deletar o lembrete.' });
+  }
+};
+
+export const patchReminder = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const { message, notificationDate } = req.body as CreateReminderRequestBody;
+    const parsedNotificationDate = new Date(notificationDate);
+
+    await prisma.reminder.update({
+      data: { message: message, notificationDate: parsedNotificationDate },
+      where: { id },
+    });
+    return res.status(200).json({ message: 'Lembrete atualizado com sucesso' });
+  } catch (error) {
+    console.error('Falha ao tentar atualizar um lembrete', error);
+    return res.status(500).json({ message: 'Erro ao atualizar o lembrete' });
+  }
+};
+
+export const getReminderById = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const reminder = await prisma.reminder.findUnique({
+      where: {
+        id,
+      },
+    });
+    if (!reminder) {
+      return res.status(404).json({ message: 'Lembrete não encontrado.' });
+    }
+    return res.status(200).json(reminder);
+  } catch (error) {
+    console.error('Erro ao buscar um lembrete:', error);
+    return res.status(500).json({ message: 'Erro interno do servidor.' });
   }
 };

@@ -19,5 +19,24 @@ GET {{baseUrl}}/api/reminders
 
 
 ###
-# @name DeleteReminder
+# @name listRemindersById
+GET  {{baseUrl}}/api/reminders/cmfx1ju3s0000icdcek3nk4jd
+
+
+
+###
+# @name deleteReminder
 DELETE {{baseUrl}}/api/reminders/cmfx0y6b60000icufqoshe5co
+
+
+###
+# @name patchReminder
+PATCH  {{baseUrl}}/api/reminders/cmfx11bq60001icufytsel1uq
+Content-Type: application/json
+
+
+{
+  "message": "Teste",
+  "notificationDate": "2023-04-30T13:00:00"
+
+}
