@@ -50,8 +50,23 @@ Content-Type: application/json
 
 
 {
-  "name": "Teste",
-  "email": "teste@gmail.com",
+  "name": "matheus",
+  "email": "matheus.campos@gmail.com",
+  "password": "123"
+
+}
+
+
+###
+# @name sessionsCreate
+
+POST {{baseUrl}}/api/sessions
+Content-Type: application/json
+
+
+{
+  "name": "matheus",
+  "email": "matheus.campos@gmail.com",
   "password": "123"
 
 }
