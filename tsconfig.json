@@ -12,6 +12,11 @@
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true,
+    "typeRoots": [
+      // <--- ADICIONADO AQUI
+      "./node_modules/@types",
+      "./src/@types"
+    ],
 
     /* --- Atalhos para Importação (Opcional, mas muito recomendado) --- */
     "baseUrl": ".",
@@ -19,6 +24,6 @@
       "@/*": ["src/*"]
     }
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "src/@types/**/*"],
   "exclude": ["node_modules"]
 }

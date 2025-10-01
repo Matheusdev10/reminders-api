@@ -1,4 +1,3 @@
-// src/routes/remindersRoutes.ts
 import { Router } from 'express';
 import {
   createReminder,
@@ -6,14 +5,15 @@ import {
   deleteReminder,
   patchReminder,
   getReminderById,
-} from '../controllers/remindersController'; // Importa a função do controller
+} from '../controllers/remindersController';
+import { authMiddleware } from '@/middleware/authMiddleware';
 
 const router = Router();
 
-router.post('/', createReminder);
-router.delete('/:id', deleteReminder);
-router.patch('/:id', patchReminder);
-router.get('/', getReminders);
-router.get('/:id', getReminderById);
+router.post('/', authMiddleware, createReminder);
+router.delete('/:id', authMiddleware, deleteReminder);
+router.patch('/:id', authMiddleware, patchReminder);
+router.get('/', authMiddleware, getReminders);
+router.get('/:id', authMiddleware, getReminderById);
 
 export default router;

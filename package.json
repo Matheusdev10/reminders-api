@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon --watch 'src/**/*.ts' --exec 'ts-node -r tsconfig-paths/register src/index.ts'",
+    "dev": "nodemon --watch 'src/**/*.ts' --exec 'ts-node --files -r tsconfig-paths/register src/index.ts'",
     "build": "tsc",
     "start": "node dist/index.js",
     "worker": "npx ts-node src/worker.ts ",

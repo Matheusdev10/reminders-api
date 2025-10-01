@@ -4,10 +4,11 @@
 # @name createReminder
 POST {{baseUrl}}/api/reminders
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3NTkzNTE3NDQsImV4cCI6MTc1OTQzODE0NCwic3ViIjoiY21nMWF6Z3BxMDAwMGljaGI5cXk2ZXJ4ciJ9.pZAx0b43o12qjjD2XMEV5AULywEqvgPviNNFOJ88evs
 
 
 {
-  "message": "Pagar internet",
+  "message": "Pagar agua",
   "notificationDate": "2025-09-24T23:40:00"
 
 }

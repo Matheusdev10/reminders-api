@@ -1,4 +1,3 @@
-// src/routes/remindersRoutes.ts
 import { Router } from 'express';
 import { sessionsController } from '../controllers/sessionsController';
 
