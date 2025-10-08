@@ -4,12 +4,12 @@
 # @name createReminder
 POST {{baseUrl}}/api/reminders
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3NTkzNTE3NDQsImV4cCI6MTc1OTQzODE0NCwic3ViIjoiY21nMWF6Z3BxMDAwMGljaGI5cXk2ZXJ4ciJ9.pZAx0b43o12qjjD2XMEV5AULywEqvgPviNNFOJ88evs
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJub21lIjoibWF0aGV1cyIsImVtYWlsIjoibWF0aGV1cy5jYW1wb3NAZ21haWwuY29tIiwiaWF0IjoxNzU5OTUwMDgyLCJleHAiOjE3NjAwMzY0ODIsInN1YiI6ImNtZzFhemdwcTAwMDBpY2hiOXF5NmVyeHIifQ.ojfXLDkx_wSv3MQDfz28enYQTP8dSMdVJ-PW01Ljpu4
 
 
 {
-  "message": "Pagar agua",
-  "notificationDate": "2025-09-24T23:40:00"
+  "message": "Pagar jessica",
+  "notificationDate": "2025-10-08T16:51:00"
 
 }
 
@@ -51,8 +51,8 @@ Content-Type: application/json
 
 
 {
-  "name": "matheus",
-  "email": "matheus.campos@gmail.com",
+  "name": "ma",
+  "email": "matheus.campos@",
   "password": "123"
 
 }

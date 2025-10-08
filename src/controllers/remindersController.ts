@@ -2,14 +2,24 @@ import { Request, Response } from 'express';
 import prisma from '../models/prisma';
 import { reminderQueue } from '../lib/queue';
 
-interface CreateReminderRequestBody {
-  message: string;
-  notificationDate: string;
-}
+import { z } from 'zod';
+
+const createReminderBodySchema = z.object({
+  message: z.string().min(3),
+  notificationDate: z.coerce.date().refine((date) => date > new Date(), {
+    message: 'A data do lembrete deve ser uma data no futuro.',
+  }),
+});
+const reminderParamsSchema = z.object({
+  id: z.cuid({ message: 'ID do lembrete inválido.' }),
+});
+const patchReminderBodySchema = createReminderBodySchema.partial();
 
 export const createReminder = async (req: Request, res: Response) => {
   try {
-    const { message, notificationDate } = req.body as CreateReminderRequestBody;
+    const { message, notificationDate } = createReminderBodySchema.parse(
+      req.body
+    );
     const userId = req.user.id;
 
     if (!message || !notificationDate) {
@@ -19,6 +29,7 @@ export const createReminder = async (req: Request, res: Response) => {
     }
 
     const parsedNotificationDate = new Date(notificationDate);
+    console.log(parsedNotificationDate, 'parsedNotificationDate');
     if (isNaN(parsedNotificationDate.getTime())) {
       return res
         .status(400)
@@ -43,6 +54,11 @@ export const createReminder = async (req: Request, res: Response) => {
 
     return res.status(201).json(newReminder);
   } catch (error) {
+    if (error instanceof z.ZodError) {
+      return res
+        .status(400)
+        .json({ message: 'Erro de validação.', issues: error.issues });
+    }
     console.error('Erro ao criar um lembrete:', error);
     return res.status(500).json({ message: 'Erro interno do servidor.' });
   }
@@ -93,20 +109,41 @@ export const deleteReminder = async (req: Request, res: Response) => {
 
 export const patchReminder = async (req: Request, res: Response) => {
   try {
-    const { id } = req.params;
+    const { id } = reminderParamsSchema.parse(req.params);
     const userId = req.user.id;
 
-    const { message, notificationDate } = req.body as CreateReminderRequestBody;
-    const parsedNotificationDate = new Date(notificationDate);
+    const dataToUpdate = patchReminderBodySchema.parse(req.body);
 
-    await prisma.reminder.updateMany({
-      data: { message: message, notificationDate: parsedNotificationDate },
-      where: { id, userId },
+    if (Object.keys(dataToUpdate).length === 0) {
+      return res
+        .status(400)
+        .json({ message: 'Nenhum dado fornecido para atualização.' });
+    }
+
+    const result = await prisma.reminder.updateMany({
+      where: {
+        id: id,
+        userId: userId,
+      },
+      data: dataToUpdate,
     });
+
+    if (result.count === 0) {
+      return res.status(404).json({
+        message:
+          'Lembrete não encontrado ou você não tem permissão para editá-lo.',
+      });
+    }
+
     return res.status(200).json({ message: 'Lembrete atualizado com sucesso' });
   } catch (error) {
+    if (error instanceof z.ZodError) {
+      return res
+        .status(400)
+        .json({ message: 'Erro de validação.', issues: error.format() });
+    }
     console.error('Falha ao tentar atualizar um lembrete', error);
-    return res.status(500).json({ message: 'Erro ao atualizar o lembrete' });
+    return res.status(500).json({ message: 'Erro ao atualizar o lembrete.' });
   }
 };
 
