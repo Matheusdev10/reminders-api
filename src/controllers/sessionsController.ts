@@ -5,29 +5,28 @@ const { sign } = require('jsonwebtoken');
 import prisma from '../models/prisma';
 import { auth } from '../configs/auth';
 
-interface SessionsRequestBody {
-  email: string;
-  password: string;
-}
+import { z } from 'zod';
+import { AppError } from '@/errors/AppError';
+
+const createSessionBodySchema = z.object({
+  email: z.email({ message: 'Formato de e-mail inválido.' }),
+  password: z.string().min(1, { message: 'A senha é obrigatória.' }),
+});
 
 export const sessionsController = async (req: Request, res: Response) => {
   try {
-    const { email, password } = req.body as SessionsRequestBody;
+    const { email, password } = createSessionBodySchema.parse(req.body);
 
     const user = await prisma.user.findUnique({ where: { email } });
 
     if (!user) {
-      return res.status(401).json({
-        message: 'E-mail e/ou senha incorretos',
-      });
+      throw new AppError('E-mail e/ou senha incorretos', 401);
     }
 
     const passwordMatched = await compare(password, user.password);
 
     if (!passwordMatched) {
-      return res.status(401).json({
-        message: 'E-mail e/ou senha incorretos',
-      });
+      throw new AppError('E-mail e/ou senha incorretos', 401);
     }
 
     const { secret, expiresIn } = auth.jwt;
