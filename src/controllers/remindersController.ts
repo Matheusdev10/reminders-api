@@ -3,6 +3,7 @@ import prisma from '../models/prisma';
 import { reminderQueue } from '../lib/queue';
 
 import { z } from 'zod';
+import { AppError } from '@/errors/AppError';
 
 const createReminderBodySchema = z.object({
   message: z.string().min(3),
@@ -23,17 +24,16 @@ export const createReminder = async (req: Request, res: Response) => {
     const userId = req.user.id;
 
     if (!message || !notificationDate) {
-      return res.status(400).json({
-        message: 'Mensagem e data/hora de notificação são obrigatórios.',
-      });
+      throw new AppError(
+        'Mensagem e data/hora de notificação são obrigatórios.',
+        400
+      );
     }
 
     const parsedNotificationDate = new Date(notificationDate);
     console.log(parsedNotificationDate, 'parsedNotificationDate');
     if (isNaN(parsedNotificationDate.getTime())) {
-      return res
-        .status(400)
-        .json({ message: 'Formato de data/hora de notificação inválido.' });
+      throw new AppError('Formato de data/hora de notificação inválido.', 400);
     }
 
     const newReminder = await prisma.reminder.create({
@@ -95,10 +95,10 @@ export const deleteReminder = async (req: Request, res: Response) => {
       },
     });
     if (result.count === 0) {
-      return res.status(404).json({
-        message:
-          'Lembrete não encontrado ou você não tem permissão para deletá-lo.',
-      });
+      throw new AppError(
+        'Lembrete não encontrado ou você não tem permissão para deletá-lo.',
+        400
+      );
     }
     return res.status(204).send();
   } catch (error) {
@@ -115,9 +115,7 @@ export const patchReminder = async (req: Request, res: Response) => {
     const dataToUpdate = patchReminderBodySchema.parse(req.body);
 
     if (Object.keys(dataToUpdate).length === 0) {
-      return res
-        .status(400)
-        .json({ message: 'Nenhum dado fornecido para atualização.' });
+      throw new AppError('Nenhum dado fornecido para atualização.', 400);
     }
 
     const result = await prisma.reminder.updateMany({
@@ -129,10 +127,10 @@ export const patchReminder = async (req: Request, res: Response) => {
     });
 
     if (result.count === 0) {
-      return res.status(404).json({
-        message:
-          'Lembrete não encontrado ou você não tem permissão para editá-lo.',
-      });
+      throw new AppError(
+        'Lembrete não encontrado ou você não tem permissão para editá-lo.',
+        404
+      );
     }
 
     return res.status(200).json({ message: 'Lembrete atualizado com sucesso' });

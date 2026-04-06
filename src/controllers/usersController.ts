@@ -2,12 +2,7 @@ import { Request, Response } from 'express';
 import { hash } from 'bcryptjs';
 import prisma from '../models/prisma';
 import { z } from 'zod';
-
-// interface CreateUserRequestBody {
-//   name: string;
-//   email: string;
-//   password: string;
-// }
+import { AppError } from '@/errors/AppError';
 
 const createUserBodySchema = z.object({
   name: z
@@ -24,17 +19,14 @@ export const createUser = async (req: Request, res: Response) => {
     const { name, email, password } = createUserBodySchema.parse(req.body);
 
     if (!name || !email || !password) {
-      return res.status(400).json({
-        message: 'Nome, e-mail e senha são obrigatórios.',
-      });
+      throw new AppError('Nome, e-mail e senha são obrigatórios.', 400);
     }
-
     const userExists = await prisma.user.findUnique({
       where: { email },
     });
 
     if (userExists) {
-      return res.status(409).json({ message: 'Este e-mail já está em uso.' });
+      throw new AppError('Este e-mail já está em uso.', 409);
     }
 
     const hashedPassword = await hash(password, 8);

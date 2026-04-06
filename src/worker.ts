@@ -35,7 +35,7 @@ const worker = new Worker(
       await mail.sendMail({
         from: 'Lembretes App <lembretes@app.com>',
         // Para testes, podemos usar um e-mail fixo ou, no futuro, pegar do usuário
-        to: 'usuario-teste@email.com',
+        to: 'math99720@gmail.com',
         subject: `Seu lembrete: ${reminder.message.substring(0, 20)}...`,
         html: `
         <h1>Olá!</h1>

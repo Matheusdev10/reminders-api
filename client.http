@@ -4,12 +4,12 @@
 # @name createReminder
 POST {{baseUrl}}/api/reminders
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJub21lIjoibWF0aGV1cyIsImVtYWlsIjoibWF0aGV1cy5jYW1wb3NAZ21haWwuY29tIiwiaWF0IjoxNzU5OTUwMDgyLCJleHAiOjE3NjAwMzY0ODIsInN1YiI6ImNtZzFhemdwcTAwMDBpY2hiOXF5NmVyeHIifQ.ojfXLDkx_wSv3MQDfz28enYQTP8dSMdVJ-PW01Ljpu4
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJub21lIjoibWF0aGV1cyIsImVtYWlsIjoibWF0aGV1cy5jYW1wb3NAZ21haWwuY29tIiwiaWF0IjoxNzYwMTUxNzk2LCJleHAiOjE3NjAyMzgxOTYsInN1YiI6ImNtZzFhemdwcTAwMDBpY2hiOXF5NmVyeHIifQ.7QmKdX5woJ3eNsbaeIEA-JhxIFHsqcWP6nz6Rcn_5p4
 
 
 {
-  "message": "Pagar jessica",
-  "notificationDate": "2025-10-08T16:51:00"
+  "message": "teste matheus",
+  "notificationDate": "2025-10-11T12:05:00"
 
 }
 
@@ -51,9 +51,9 @@ Content-Type: application/json
 
 
 {
-  "name": "ma",
-  "email": "matheus.campos@",
-  "password": "123"
+  "name": "lucio",
+  "email": "lucio.campos@gmail.com",
+  "password": "123456"
 
 }
 
@@ -71,3 +71,7 @@ Content-Type: application/json
   "password": "123"
 
 }
+
+
+
+
