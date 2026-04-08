@@ -2,6 +2,8 @@ import express, { Request, Response, NextFunction } from 'express';
 import dotenv from 'dotenv';
 import { routes } from './routes';
 import { AppError } from './errors/AppError';
+import swaggerUi from 'swagger-ui-express';
+import { swaggerSpec } from './configs/swagger';
 
 dotenv.config();
 
@@ -9,6 +11,11 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 app.use(express.json());
+
+app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+app.get('/docs.json', (_request: Request, response: Response) => {
+  return response.json(swaggerSpec);
+});
 
 app.use(routes);
 

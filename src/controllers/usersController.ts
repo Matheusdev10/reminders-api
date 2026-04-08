@@ -50,6 +50,10 @@ export const createUser = async (req: Request, res: Response) => {
       });
     }
     console.error('Falha ao criar usuário:', error);
-    return res.status(500).json({ message: 'Erro interno ao criar usuário.' });
+    return res
+      .status(500)
+      .json({
+        message: 'Erro interno ao criar usuário. Esse usuário ja existe',
+      });
   }
 };

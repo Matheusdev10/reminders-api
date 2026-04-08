@@ -5,11 +5,34 @@ import { reminderQueue } from '../lib/queue';
 import { z } from 'zod';
 import { AppError } from '@/errors/AppError';
 
+const isoDateTimeWithTimezoneSchema = z
+  .string()
+  .refine(
+    (value) => {
+      const isoWithTimezonePattern =
+        /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(:\d{2}(\.\d{1,3})?)?(Z|[+-]\d{2}:\d{2})$/;
+      if (!isoWithTimezonePattern.test(value)) {
+        return false;
+      }
+
+      const parsedDate = new Date(value);
+      return !isNaN(parsedDate.getTime());
+    },
+    {
+      message:
+        'notificationDate deve estar em ISO 8601 com fuso. Ex: 2026-06-04T00:00:00-03:00',
+    }
+  )
+  .transform((value) => new Date(value));
+
 const createReminderBodySchema = z.object({
   message: z.string().min(3),
-  notificationDate: z.coerce.date().refine((date) => date > new Date(), {
-    message: 'A data do lembrete deve ser uma data no futuro.',
-  }),
+  notificationDate: isoDateTimeWithTimezoneSchema.refine(
+    (date) => date > new Date(),
+    {
+      message: 'A data do lembrete deve ser uma data no futuro.',
+    }
+  ),
 });
 const reminderParamsSchema = z.object({
   id: z.cuid({ message: 'ID do lembrete inválido.' }),
@@ -30,21 +53,15 @@ export const createReminder = async (req: Request, res: Response) => {
       );
     }
 
-    const parsedNotificationDate = new Date(notificationDate);
-    console.log(parsedNotificationDate, 'parsedNotificationDate');
-    if (isNaN(parsedNotificationDate.getTime())) {
-      throw new AppError('Formato de data/hora de notificação inválido.', 400);
-    }
-
     const newReminder = await prisma.reminder.create({
       data: {
         message,
-        notificationDate: parsedNotificationDate,
+        notificationDate,
         userId,
       },
     });
 
-    const delay = parsedNotificationDate.getTime() - new Date().getTime();
+    const delay = notificationDate.getTime() - new Date().getTime();
     console.log(`Agendando job com ${delay / 1000}s de atraso.`);
     await reminderQueue.add(
       'send-notification',
