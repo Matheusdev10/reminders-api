@@ -14,17 +14,9 @@
     "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true,
     "typeRoots": [
-      // <--- ADICIONADO AQUI
       "./node_modules/@types",
       "./src/@types"
-    ],
-
-    /* --- Atalhos para Importação (Opcional, mas muito recomendado) --- */
-    "ignoreDeprecations": "6.0",
-    "baseUrl": ".",
-    "paths": {
-      "@/*": ["src/*"]
-    }
+    ]
   },
   "include": ["src/**/*", "src/@types/**/*"],
   "exclude": ["node_modules"]

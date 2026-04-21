@@ -1,6 +1,8 @@
+import { type SignOptions } from 'jsonwebtoken';
+
 export const auth = {
   jwt: {
-    secret: process.env.AUTH_SECRET || 'default',
-    expiresIn: '1d',
+    secret: process.env.JWT_SECRET,
+    expiresIn: '1d' as SignOptions['expiresIn'],
   },
 };

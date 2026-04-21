@@ -1,8 +1,7 @@
 import { Request, Response } from 'express';
-import { hash } from 'bcryptjs';
-import prisma from '../models/prisma';
 import { z } from 'zod';
-import { AppError } from '@/errors/AppError';
+import { AppError } from '../errors/AppError';
+import { createUserService } from '../services/createUserService';
 
 const createUserBodySchema = z.object({
   name: z
@@ -17,29 +16,11 @@ const createUserBodySchema = z.object({
 export const createUser = async (req: Request, res: Response) => {
   try {
     const { name, email, password } = createUserBodySchema.parse(req.body);
-
-    if (!name || !email || !password) {
-      throw new AppError('Nome, e-mail e senha são obrigatórios.', 400);
-    }
-    const userExists = await prisma.user.findUnique({
-      where: { email },
+    const userWithoutPassword = await createUserService({
+      name,
+      email,
+      password,
     });
-
-    if (userExists) {
-      throw new AppError('Este e-mail já está em uso.', 409);
-    }
-
-    const hashedPassword = await hash(password, 8);
-
-    const user = await prisma.user.create({
-      data: {
-        name,
-        email,
-        password: hashedPassword,
-      },
-    });
-
-    const { password: _, ...userWithoutPassword } = user;
 
     return res.status(201).json(userWithoutPassword);
   } catch (error) {
@@ -49,11 +30,12 @@ export const createUser = async (req: Request, res: Response) => {
         issues: error.issues,
       });
     }
+
+    if (error instanceof AppError) {
+      return res.status(error.statusCode).json({ message: error.message });
+    }
+
     console.error('Falha ao criar usuário:', error);
-    return res
-      .status(500)
-      .json({
-        message: 'Erro interno ao criar usuário. Esse usuário ja existe',
-      });
+    return res.status(500).json({ message: 'Erro interno ao criar usuário.' });
   }
 };

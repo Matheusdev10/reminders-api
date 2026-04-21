@@ -6,7 +6,7 @@ import {
   patchReminder,
   getReminderById,
 } from '../controllers/remindersController';
-import { authMiddleware } from '@/middleware/authMiddleware';
+import { authMiddleware } from '../middleware/authMiddleware';
 
 const router = Router();
 
@@ -53,15 +53,39 @@ const router = Router();
  *     summary: Lista os lembretes do usuario autenticado
  *     security:
  *       - bearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           minimum: 1
+ *           default: 1
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           minimum: 1
+ *           maximum: 100
+ *           default: 20
+ *       - in: query
+ *         name: status
+ *         schema:
+ *           type: string
+ *           enum: [AGENDADO, ENVIADO, ERRO]
  *     responses:
  *       200:
- *         description: Lista de lembretes
+ *         description: Lista paginada de lembretes
  *         content:
  *           application/json:
  *             schema:
- *               type: array
- *               items:
- *                 $ref: '#/components/schemas/Reminder'
+ *               type: object
+ *               properties:
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/Reminder'
+ *                 meta:
+ *                   $ref: '#/components/schemas/PaginationMeta'
  *       401:
  *         $ref: '#/components/responses/UnauthorizedError'
  *       500:
@@ -150,8 +174,8 @@ router.get('/', authMiddleware, getReminders);
  *     responses:
  *       204:
  *         description: Lembrete removido com sucesso
- *       400:
- *         $ref: '#/components/responses/BadRequestError'
+ *       404:
+ *         $ref: '#/components/responses/NotFoundError'
  *       401:
  *         $ref: '#/components/responses/UnauthorizedError'
  *       500:

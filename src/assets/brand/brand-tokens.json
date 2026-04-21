@@ -1,0 +1,25 @@
+{
+  "name": "Remindly",
+  "tagline": "Lembretes que chegam no tempo certo",
+  "voice": "Confiavel, claro e humano",
+  "colors": {
+    "primary": "#0B3C5D",
+    "secondary": "#116D6E",
+    "accent": "#F4D35E",
+    "warm": "#EE964B",
+    "background": "#F4F6F8",
+    "surface": "#FFFFFF",
+    "textStrong": "#0F172A",
+    "textMuted": "#64748B"
+  },
+  "usage": {
+    "emailHeaderGradient": ["#0B3C5D", "#116D6E"],
+    "ctaBackground": "#0B3C5D",
+    "ctaText": "#FFFFFF"
+  },
+  "fonts": {
+    "headline": "Poppins",
+    "body": "Poppins",
+    "fallback": "Segoe UI, Helvetica, Arial, sans-serif"
+  }
+}

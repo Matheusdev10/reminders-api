@@ -6,12 +6,26 @@ const options: Options = {
     info: {
       title: 'Reminder API',
       version: '1.0.0',
-      description: 'Documentação da API de lembretes.',
+      description:
+        'API para gestão de lembretes com autenticação JWT, processamento assíncrono e envio de e-mails.',
+      contact: {
+        name: 'Matheus',
+        email: 'matheus@email.com',
+      },
+      license: {
+        name: 'MIT',
+      },
     },
     servers: [
       {
-        url: 'http://localhost:3000',
+        url: process.env.API_BASE_URL ?? 'http://localhost:3000',
+        description: process.env.NODE_ENV === 'production' ? 'Production' : 'Local',
       },
+    ],
+    tags: [
+      { name: 'Users', description: 'Cadastro de usuários' },
+      { name: 'Sessions', description: 'Autenticação e emissão de JWT' },
+      { name: 'Reminders', description: 'Gestão de lembretes e agendamentos' },
     ],
     components: {
       securitySchemes: {
@@ -60,6 +74,15 @@ const options: Options = {
               description: 'Data de atualizacao em UTC.',
               example: '2026-04-07T00:04:14.911Z',
             },
+          },
+        },
+        PaginationMeta: {
+          type: 'object',
+          properties: {
+            page: { type: 'integer', example: 1 },
+            limit: { type: 'integer', example: 20 },
+            total: { type: 'integer', example: 42 },
+            totalPages: { type: 'integer', example: 3 },
           },
         },
         ErrorResponse: {

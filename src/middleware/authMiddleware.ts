@@ -17,10 +17,15 @@ export function authMiddleware(
   }
 
   const [, token] = authHeader.split(' '); // Separa "Bearer" do token
+  const secret = auth.jwt.secret;
+
+  if (!secret) {
+    return res.status(500).json({ message: 'Configuração JWT inválida.' });
+  }
 
   try {
     // 3. Valida o token
-    const decoded = verify(token, auth.jwt.secret);
+    const decoded = verify(token, secret);
     if (typeof decoded.sub !== 'string') {
       throw new Error(
         'Token JWT inválido: subject (sub) não encontrado ou em formato incorreto.'

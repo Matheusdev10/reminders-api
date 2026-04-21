@@ -8,3 +8,7 @@ prisma/*.db-shm
 .env
 
 /src/generated/prisma
+
+# Local docs (not tracked)
+ARCHITECTURE.md
+DOCUMENTATION.md
